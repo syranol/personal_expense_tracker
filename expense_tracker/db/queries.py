@@ -77,3 +77,21 @@ def get_filtered_report(start_date, end_date, category=None):
 
     with get_connection() as conn:
         return conn.execute(sql, (start_date, end_date, category, category)).fetchall()
+
+def get_budget_vs_actual(month):
+    sql = """
+    SELECT c.name, b.month, 
+           ROUND(b.amount_cents/100.0,2) AS budget,
+           ROUND(COALESCE(SUM(e.amount_cents),0)/100.0,2) AS spent,
+           ROUND((b.amount_cents - COALESCE(SUM(e.amount_cents),0))/100.0,2) AS remaining
+    FROM budgets b
+    JOIN categories c ON c.category_id = b.category_id
+    LEFT JOIN expenses e ON e.category_id = b.category_id
+    WHERE b.month = ?
+    GROUP BY c.name
+    ORDER BY c.name;
+    """
+
+    with get_connection() as conn:
+        return conn.execute(sql, (month,)).fetchall()
+    

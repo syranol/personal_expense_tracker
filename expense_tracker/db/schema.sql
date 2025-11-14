@@ -37,6 +37,15 @@ CREATE TABLE IF NOT EXISTS budgets (
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
+CREATE VIEW IF NOT EXISTS v_monthly_spending AS
+SELECT user_id,
+       strftime('%Y-%m', expense_date) AS month,
+       category_id,
+       SUM(amount_cents) AS total_cents
+FROM expenses
+GROUP BY user_id, category_id, month;
+
 CREATE INDEX IF NOT EXISTS idx_budgets_month ON budgets(month);
 CREATE INDEX IF NOT EXISTS idx_expenses_date ON expenses(expense_date);
 CREATE INDEX IF NOT EXISTS idx_expenses_cateogry ON expenses(category_id);
+

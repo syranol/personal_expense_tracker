@@ -46,3 +46,19 @@ On failture, Integrity Error is generated.
         (user_info.name, )
     )
     """
+
+### Endpoints
+
+Node.js Backend API
+
+GET /api/expenses
+GET /api/expenses/:id
+POST /api/expenses
+GET /api/reports/monthly?month=2025-11
+GET /api/budget-vs-actual?month=2025-11
+
+### Developer Notes
+
+- Setup Node.js project
+    - npm init -y
+    - npm install express better-sqlite3 cors
